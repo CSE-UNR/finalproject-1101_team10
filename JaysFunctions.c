@@ -4,7 +4,7 @@
 
 #include <stdio.h>
 
-void int loadNewImage(FILE* filePtr, int rowSize, int colSize, int imageArray[][colSize]);
+void loadNewImage(FILE* filePtr, int rowSize, int colSize, int imageArray[][colSize]);
 void displayEditMenu();
 int getEditChoice();
 void getCropSpecs(int* startRowPtr, int* endRowPtr, int* startColPtr, int* endColPtr);
@@ -16,7 +16,7 @@ int main() {
 	return 0;
 }
 
-void int loadNewImage(FILE* filePtr, int rowSize, int colSize, int imageArray[][colSize]){
+void loadNewImage(FILE* filePtr, int rowSize, int colSize, int imageArray[][colSize]){
 	for(int row = 0; row < rowSize; row ++){
 		for(int col = 0; col < colSize; col++){
 			fscanf(filePtr, "%d", &imageArray[row][col]);
@@ -32,6 +32,8 @@ void displayEditMenu(){
 }
 
 int getEditChoice(){
+	int choice;
+	
 	printf("Enter the number of your choice: ");
 	scanf("%d", &choice);
 	
@@ -62,7 +64,7 @@ void getCropSpecs(int* startRowPtr, int* endRowPtr, int* startColPtr, int* endCo
 void saveNewImage(FILE* filePtr, int rowSize, int colSize, int imageArray[][colSize]){
 	for(int row = 0; row < rowSize; row ++){
 		for(int col = 0; col < colSize; col++){
-			fprintf(filePtr, "%d", &imageArray[row][col]);
+			fprintf(filePtr, "%d", imageArray[row][col]);
 		}
 	}
 }
@@ -70,3 +72,5 @@ void saveNewImage(FILE* filePtr, int rowSize, int colSize, int imageArray[][colS
 void sayGoodbye(){
 	printf("Goodbye!\n");
 }
+
+
