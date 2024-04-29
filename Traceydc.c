@@ -1,0 +1,74 @@
+//Tracey Msangi
+#include <stdio.h>
+
+int main(){
+
+	printf("Design Document\n");
+
+return 0;
+}
+
+
+
+/*
+Data
+Image size – 2D array of int (10 x 10)
+Menu choice – char
+Display image – array of char
+Image data – int
+Edit – char
+Edited image – 2D array of ints
+Crop – int
+Dim – int
+Brighten – int
+Rotate – int
+Save edited image choice - bool
+File name to store edited image – string
+Description
+The program will prompt the user for a choice. The choice will be to either load an
+existing image, edit the image, or save the image. When the user selects display
+image, they will be represented with an image from another file. The user can then
+choose to edit the image. This will give the user the option to crop the image, dim
+the image, brighten the image, or rotate the image. After the user makes an edit,
+they can choose to make another edit on the image or go back to the main menu.
+When back to the main menu, the user can choose to save the edited image in a
+new file. The last option will be to exit the program.
+Functions
+main()
+Data: Arrays for image data. Variables to store choice, file names, and loop.
+Functionality: Display menu. Receive the user’s choice and work accordingly.
+Load the image from the file. Display image. Edit image. After the user is done
+editing, store the edited image.
+LoadImage()
+Input Parameters: File name pointer, array for image data
+Returned Output: None
+Functionality: Load values from a file into the image data array.
+DisplayImage()
+Input Parameters: array for image data
+Returned Output: None
+Functionality: Display the current image represented by the image data 2D array.
+EditImage()
+Input Parameters: array for image data
+Returned Output: None
+Functionality: Allow the user to edit the current image.
+CropImage()
+Input Parameters: array for image data, row, column, indices.
+Returned Output: void
+Functionality: Crop the image
+DimImage()
+Input Parameters: array for image data
+Returned Output: void
+Functionality: Reduces the brightness value of the image.
+BrightenImage()
+Input Parameters: array for image data
+Returned Output: void
+Functionality: Increases the brightness value of the image.
+SaveImageToFile()
+Input Parameters: File name pointer, array for image data
+Returned Output: File pointer
+Functionality: Save the image to a file.
+ExitImage ()
+Input Parameters: none
+Returned Output: Goodbye message.
+Functionality: Exit program
+*/
