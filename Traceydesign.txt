@@ -1,16 +1,3 @@
-//Tracey Msangi
-#include <stdio.h>
-
-int main(){
-
-	printf("Design Document\n");
-
-return 0;
-}
-
-
-
-/*
 Data
 Image size – 2D array of int (10 x 10)
 Menu choice – char
@@ -61,7 +48,8 @@ Returned Output: void
 Functionality: Reduces the brightness value of the image.
 BrightenImage()
 Input Parameters: array for image data
-Returned Output: void brightness value of the image.
+Returned Output: void
+Functionality: Increases the brightness value of the image.
 SaveImageToFile()
 Input Parameters: File name pointer, array for image data
 Returned Output: File pointer
@@ -69,5 +57,4 @@ Functionality: Save the image to a file.
 ExitImage ()
 Input Parameters: none
 Returned Output: Goodbye message.
-Functionality: Exit program
-*/
+Functionality:Exit 
