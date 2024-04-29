@@ -1,5 +1,5 @@
 Data
-Image size – 2D array of int (10 x 10)
+Image size – array of int (10 x 10)
 Menu choice – char
 Display image – array of char
 Image data – int
