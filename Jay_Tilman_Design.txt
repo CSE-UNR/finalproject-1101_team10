@@ -1,5 +1,5 @@
 Final Project Design
-Jay Tilman
+Jay Tilman and Tracey Msangi
 Image Processing Program
 
 Data:
@@ -109,3 +109,8 @@ INPUT PARAMETERS: int rowSize, int colSize, int imageArray, FILE* filePtr
 RETURNED OUTPUT: none
 FUNCTIONALITY: Print the newly created image to the newly created file with the name the user 
 specified 
+
+sayGoodbye()
+INPUT PARAMETERS: none
+RETURNED OUTPUT: none
+FUNCTIONALITY: Display a goodbye message to the terminal.
