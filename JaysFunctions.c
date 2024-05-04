@@ -34,8 +34,8 @@ int main() {
 }
 		
 void loadNewImage(FILE* filePtr, int rowSize, int colSize, int imageArray[][colSize], int* trueRowPtr, int* trueColPtr){
-	int row, col, tRow, tCol;
-	tRow = tCol = 0;
+	int count, row, col, tRow, tCol, columnCount[colSize];
+	count = tRow = tCol = 0;
 	
 	for(row = 0; row < rowSize; row++){
 		for(col = 0; col < colSize; col++){
@@ -43,11 +43,14 @@ void loadNewImage(FILE* filePtr, int rowSize, int colSize, int imageArray[][colS
 				tRow++;
 				
 			}
+			if(imageArray[row][col] >=0){
+				count++;
+			}
 		}
 	}
-	for(col = 0; col < colSize; col++){
-			while(fscanf(filePtr, "%d", &imageArray[col]) == 1){
-				
+	
+	tCol = count / tRow;
+	
 	*trueRowPtr = tRow;
 	*trueColPtr = tCol;
 }
@@ -100,5 +103,10 @@ void saveNewImage(FILE* filePtr, int rowSize, int colSize, int imageArray[][colS
 void sayGoodbye(){
 	printf("Goodbye!\n");
 }
+
+
+
+
+
 
 
