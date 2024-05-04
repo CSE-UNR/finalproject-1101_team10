@@ -41,16 +41,11 @@ void loadNewImage(FILE* filePtr, int rowSize, int colSize, int imageArray[][colS
 		for(col = 0; col < colSize; col++){
 			while(fscanf(filePtr, "%d", &imageArray[row][col]) == 1){
 				tRow++;
-				
 			}
-			if(imageArray[row][col] >=0){
-				count++;
-			}
+			
 		}
 	}
-	
 	tCol = count / tRow;
-	
 	*trueRowPtr = tRow;
 	*trueColPtr = tCol;
 }
