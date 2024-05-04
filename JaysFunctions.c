@@ -3,8 +3,11 @@
 //Date: April 29
 
 #include <stdio.h>
+#define IMAGE "image.txt"
+#define SIZE 500
+#include <stdbool.h>
 
-void loadNewImage(FILE* filePtr, int rowSize, int colSize, int imageArray[][colSize]);
+void loadNewImage(FILE* filePtr, int rowSize, int colSize, int imageArray[][colSize], int* trueRowPtr, int* trueColPtr);
 void displayEditMenu();
 int getEditChoice();
 void getCropSpecs(int* startRowPtr, int* endRowPtr, int* startColPtr, int* endColPtr);
@@ -12,16 +15,41 @@ void saveNewImage(FILE* filePtr, int rowSize, int colSize, int imageArray[][colS
 void sayGoodbye();
 
 int main() {
-
+	FILE* loadFile;
+	int anArray[SIZE][SIZE];
+	int trueRowSize, trueColSize;
+	
+	loadFile = fopen(IMAGE, "r");
+	if(loadFile == NULL){
+		printf("AHHHH\n");
+		return 0;
+	}
+	loadNewImage(loadFile, SIZE, SIZE, anArray, &trueRowSize, &trueColSize);  
+	
+	printf(" %d, %d\n", trueRowSize, trueColSize);
+	
+	fclose(loadFile);
+	
 	return 0;
 }
-
-void loadNewImage(FILE* filePtr, int rowSize, int colSize, int imageArray[][colSize]){
-	for(int row = 0; row < rowSize; row ++){
-		for(int col = 0; col < colSize; col++){
-			fscanf(filePtr, "%d", &imageArray[row][col]);
+		
+void loadNewImage(FILE* filePtr, int rowSize, int colSize, int imageArray[][colSize], int* trueRowPtr, int* trueColPtr){
+	int row, col, tRow, tCol;
+	tRow = tCol = 0;
+	
+	for(row = 0; row < rowSize; row++){
+		for(col = 0; col < colSize; col++){
+			while(fscanf(filePtr, "%d", &imageArray[row][col]) == 1){
+				tRow++;
+				
+			}
 		}
 	}
+	for(col = 0; col < colSize; col++){
+			while(fscanf(filePtr, "%d", &imageArray[col]) == 1){
+				
+	*trueRowPtr = tRow;
+	*trueColPtr = tCol;
 }
 
 void displayEditMenu(){
