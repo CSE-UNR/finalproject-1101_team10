@@ -12,7 +12,7 @@ void loadNewImage(char fileName[], int rowSize, int colSize, int imageArray[][co
 void displayEditMenu();
 int getEditChoice();
 void getCropSpecs(int* startRowPtr, int* endRowPtr, int* startColPtr, int* endColPtr);
-void saveNewImage(FILE* filePtr, int rowSize, int colSize, int imageArray[][colSize]);
+void saveNewImage(int rowSize, int colSize, int imageArray[][colSize]);
 void sayGoodbye();
 
 int main() {
@@ -25,6 +25,7 @@ int main() {
 	
 	printf(" %d, %d\n", trueRowSize, trueColSize);
 	
+	saveNewImage(int trueRowSize, int trueColSize, int anArray[][trueColSize]);
 	
 	return 0;
 }
@@ -69,13 +70,7 @@ void loadNewImage(char fileName[], int rowSize, int colSize, int imageArray[][co
 	}
 	fclose(file);
 	
-	for(int row = 0; row < 12; row++){
-		for(int col = 0; col < 21; col++){
-			printf("%d", imageArray[row][col]);
-		}
-		printf("\n");
-	}
-	
+
 	*trueRowPtr = rowCount;
 	*trueColPtr = colCount;
 	
@@ -118,11 +113,24 @@ void getCropSpecs(int* startRowPtr, int* endRowPtr, int* startColPtr, int* endCo
 	*endColPtr = endCol;
 }
 
-void saveNewImage(FILE* filePtr, int rowSize, int colSize, int imageArray[][colSize]){
-	for(int row = 0; row < rowSize; row ++){
-		for(int col = 0; col < colSize; col++){
-			fprintf(filePtr, "%d", imageArray[row][col]);
+void saveNewImage(int rowSize, int colSize, int imageArray[][colSize]){
+	FILE* file;
+	char fileName[50];
+	
+	printf("What is the name of the file you'd like to save to? ");
+	fgets(fileName,50,stdin);
+	
+	file = fopen(fileName, "w");
+	
+	if(file != NULL){
+		for(int row = 0; row < rowSize; row ++){
+			for(int col = 0; col < colSize; col++){
+				fprintf(file, "%1d", imageArray[row][col]);
+			}
 		}
+	}
+	else{
+		printf("error\n");
 	}
 }
 
