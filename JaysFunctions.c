@@ -25,7 +25,7 @@ int main() {
 	
 	printf(" %d, %d\n", trueRowSize, trueColSize);
 	
-	saveNewImage(int trueRowSize, int trueColSize, int anArray[][trueColSize]);
+	saveNewImage(trueRowSize, trueColSize, anArray);
 	
 	return 0;
 }
@@ -70,6 +70,12 @@ void loadNewImage(char fileName[], int rowSize, int colSize, int imageArray[][co
 	}
 	fclose(file);
 	
+	for(int row = 0; row < rowCount; row++){
+			for(int col = 0; col < colCount; col++){
+				printf("%d", imageArray[row][col]);
+			}
+			printf("\n");
+		}
 
 	*trueRowPtr = rowCount;
 	*trueColPtr = colCount;
@@ -125,13 +131,15 @@ void saveNewImage(int rowSize, int colSize, int imageArray[][colSize]){
 	if(file != NULL){
 		for(int row = 0; row < rowSize; row ++){
 			for(int col = 0; col < colSize; col++){
-				fprintf(file, "%1d", imageArray[row][col]);
+				fprintf(file, "%d", imageArray[row][col]);
 			}
+			fprintf(file, "\n");
 		}
 	}
 	else{
 		printf("error\n");
 	}
+	fclose(file);
 }
 
 void sayGoodbye(){

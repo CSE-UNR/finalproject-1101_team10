@@ -1,12 +1,13 @@
 #include <stdio.h>
+#define SIZE 500
 
 // Function Declarations
 void displayMenu();
 void getMenuChoice(int* choice);
-void displayImage(int rowSize, int colSize, int imageArray[rowSize][colSize]);
-void cropImage(int image[][21], int rowSize, int colSize, int startRow, int endRow, int startCol, int endCol);
-void dimImage(int image[][21], int rowSize, int colSize);
-void brightenImage(int image[][21], int rowSize, int colSize);
+void displayImage(int rowSize, int colSize, int imageArray[][colSize]);
+void cropImage(int rowSize, int colSize, int image[][colSize], int startRow, int endRow, int startCol, int endCol);
+void dimImage(int rowSize, int colSize, int image[][colSize]);
+void brightenImage(int rowSize, int colSize, int image[][colSize]);
 void loadNewImage(int rowSize, int colSize, int imageArray[][colSize], int* trueRowPtr, int* trueColPtr);
 void saveNewImage(int rowSize, int colSize, int imageArray[][colSize]);
 void displayEditMenu();
@@ -16,9 +17,9 @@ void sayGoodbye();
 
 int main() {
     int choice;
-    int rowSize = 12;
-    int colSize = 21; 
-    int imageArray[12][21]; 
+    int rowSize;
+    int colSize; 
+    int imageArray[SIZE][SIZE]; 
 
     while (1) {
         displayMenu();
@@ -26,7 +27,7 @@ int main() {
 
         switch (choice) {
             case 1:
-                loadNewImage(rowSize, colSize, imageArray, &rowSize, &colSize);
+                loadNewImage(SIZE, SIZE, imageArray, &rowSize, &colSize);
                 break;
             case 2:
                 displayImage(rowSize, colSize, imageArray);
@@ -38,16 +39,26 @@ int main() {
                     case 1: {
                         int startRow, endRow, startCol, endCol;
                         getCropSpecs(&startRow, &endRow, &startCol, &endCol);
-                        cropImage(imageArray, rowSize, colSize, startRow, endRow, startCol, endCol);
+                        cropImage(rowSize, colSize, imageArray, startRow, endRow, startCol, endCol);
                         break;
                     }
                     case 2:
-                        dimImage(imageArray, rowSize, colSize);
+                        dimImage(rowSize, colSize, imageArray);
                         break;
                     case 3:
-                        brightenImage(imageArray, rowSize, colSize);
+                        brightenImage(rowSize, colSize, imageArray);
                         break;
                 }
+                char saveChoice;
+                printf("Do you want to save the file? (y/n) ");
+		scanf(" %c", &saveChoice);
+		switch(saveChoice){
+			case 'y':
+			case 'Y':
+				saveNewImage(rowSize, colSize, imageArray);
+				break;
+		}
+		
                 break;
             case 0:
                 sayGoodbye();
@@ -76,7 +87,7 @@ void getMenuChoice(int* choice) {
     getchar(); // Clear the input buffer
 }
 
-void displayImage(int rowSize, int colSize, int imageArray[rowSize][colSize]) {
+void displayImage(int rowSize, int colSize, int imageArray[][colSize]) {
     for (int row = 0; row < rowSize; row++) {
         for (int col = 0; col < colSize; col++) {
             switch (imageArray[row][col]) {
@@ -101,7 +112,7 @@ void displayImage(int rowSize, int colSize, int imageArray[rowSize][colSize]) {
     }
 }
 
-void cropImage(int image[][21], int rowSize, int colSize, int startRow, int endRow, int startCol, int endCol) {
+void cropImage(int rowSize, int colSize, int image[][colSize], int startRow, int endRow, int startCol, int endCol) {
     int newRowSize = endRow - startRow + 1;
     int newColSize = endCol - startCol + 1;
     int croppedImage[newRowSize][newColSize];
@@ -120,7 +131,7 @@ void cropImage(int image[][21], int rowSize, int colSize, int startRow, int endR
     }
 }
 
-void dimImage(int image[][21], int rowSize, int colSize) {
+void dimImage(int rowSize, int colSize, int image[][colSize]) {
     for (int i = 0; i < rowSize; i++) {
         for (int j = 0; j < colSize; j++) {
             if (image[i][j] > 0) {
@@ -132,7 +143,7 @@ void dimImage(int image[][21], int rowSize, int colSize) {
     }
 }
 
-void brightenImage(int image[][21], int rowSize, int colSize) {
+void brightenImage(int rowSize, int colSize, int image[][colSize]) {
     for (int i = 0; i < rowSize; i++) {
         for (int j = 0; j < colSize; j++) {
             if (image[i][j] < 4) {
@@ -151,7 +162,7 @@ void loadNewImage(int rowSize, int colSize, int imageArray[][colSize], int* true
     rowCount = colCount = elementCount = 0;
 
     printf("What is the name of the image file? ");
-    fgets(fileName, 50, stdin);
+    fscanf(stdin, "%s", fileName);
 
     file = fopen(fileName, "r");
     if (file != NULL) {
@@ -185,6 +196,13 @@ void loadNewImage(int rowSize, int colSize, int imageArray[][colSize], int* true
             }
         }
     }
+    for (int row = 0; row < rowCount; row++) {
+            for (int col = 0; col < colCount; col++) {
+                printf("%1d", imageArray[row][col]);
+            }
+            printf("\n");
+        }
+    
     fclose(file);
 
     *trueRowPtr = rowCount;
@@ -195,10 +213,8 @@ void saveNewImage(int rowSize, int colSize, int imageArray[][colSize]) {
     FILE* file;
     char fileName[50];
     
-    //printf("Do you want to save the file? (y/n) ");
-
     printf("What do you want to name the image file? (include the extension) ");
-    fgets(fileName, 50, stdin);
+    fscanf(stdin, "%s", fileName);
 
     file = fopen(fileName, "w");
 
@@ -207,6 +223,7 @@ void saveNewImage(int rowSize, int colSize, int imageArray[][colSize]) {
             for (int col = 0; col < colSize; col++) {
                 fprintf(file, "%1d", imageArray[row][col]);
             }
+       	    fprintf(file, "\n");
         }
     } else {
         printf("Error opening file.\n");
