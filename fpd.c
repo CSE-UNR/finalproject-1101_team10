@@ -1,33 +1,32 @@
-#include <stdio.h>
+#include <stdio.h> 
+#define SIZE 500
 
-// Function Declarations
 void displayMenu();
-void getMenuChoice(int* choice);
+int getMenuChoice();
 void displayImage(int rowSize, int colSize, int imageArray[rowSize][colSize]);
-void cropImage(int image[][21], int rowSize, int colSize, int startRow, int endRow, int startCol, int endCol);
-void dimImage(int image[][21], int rowSize, int colSize);
-void brightenImage(int image[][21], int rowSize, int colSize);
+void cropImage(int rowSize, int colSize, int image[][SIZE], int startRow, int endRow, int startCol, int endCol);
+void dimImage(int rowSize, int colSize, int image[][SIZE]);
+void brightenImage(int rowSize, int colSize, int image[][SIZE]);
 void loadNewImage(int rowSize, int colSize, int imageArray[][colSize], int* trueRowPtr, int* trueColPtr);
 void saveNewImage(int rowSize, int colSize, int imageArray[][colSize]);
 void displayEditMenu();
 int getEditChoice();
-void getCropSpecs(int* startRowPtr, int* endRowPtr, int* startColPtr, int* endColPtr);
+void getCropSpecs(int rowSize, int colSize, int* startRowPtr, int* endRowPtr, int* startColPtr, int* endColPtr);
 void sayGoodbye();
 
-// Main Function
 int main() {
     int choice;
-    int rowSize = 12;
-    int colSize = 21; 
-    int imageArray[12][21]; 
+    int rowSize;
+    int colSize; 
+    int imageArray[SIZE][SIZE]; 
 
     while (1) {
         displayMenu();
-        getMenuChoice(&choice);
+        choice = getMenuChoice();
 
         switch (choice) {
             case 1:
-                loadNewImage(rowSize, colSize, imageArray, &rowSize, &colSize);
+                loadNewImage(SIZE, SIZE, imageArray, &rowSize, &colSize);
                 break;
             case 2:
                 displayImage(rowSize, colSize, imageArray);
@@ -38,15 +37,15 @@ int main() {
                 switch (editChoice) {
                     case 1: {
                         int startRow, endRow, startCol, endCol;
-                        getCropSpecs(&startRow, &endRow, &startCol, &endCol);
-                        cropImage(imageArray, rowSize, colSize, startRow, endRow, startCol, endCol);
+                        getCropSpecs(rowSize, colSize, &startRow, &endRow, &startCol, &endCol);
+                        cropImage(rowSize, colSize, imageArray, startRow, endRow, startCol, endCol);
                         break;
                     }
                     case 2:
-                        dimImage(imageArray, rowSize, colSize);
+                        dimImage(rowSize, colSize, imageArray);
                         break;
                     case 3:
-                        brightenImage(imageArray, rowSize, colSize);
+                        brightenImage(rowSize, colSize, imageArray);
                         break;
                     case 0:
                         displayMenu();
@@ -74,7 +73,6 @@ int main() {
     return 0;
 }
 
-// Function Implementations
 
 void displayMenu() {
     printf("**ERINSTAGRAM**\n");
@@ -84,10 +82,13 @@ void displayMenu() {
     printf("0: Exit\n");
 }
 
-void getMenuChoice(int* choice) {
+int getMenuChoice() {
+    int choice;
+    
     printf("\nChoose from one of the options above: ");
-    scanf("%d", choice);
-    getchar(); // Clear the input buffer
+    scanf("%d", &choice);
+    
+    return choice;
 }
 
 void displayImage(int rowSize, int colSize, int imageArray[rowSize][colSize]) {
@@ -109,17 +110,19 @@ void displayImage(int rowSize, int colSize, int imageArray[rowSize][colSize]) {
                 case 4:
                     printf("0");
                     break;
+                default:
+                	printf("Sorry, no image to display.\n");
             }
         }
         printf("\n");
     }
 }
 
-void cropImage(int image[][21], int rowSize, int colSize, int startRow, int endRow, int startCol, int endCol) {
+void cropImage(int rowSize, int colSize, int image[][SIZE], int startRow, int endRow, int startCol, int endCol) {
    
 
     int newStartRow, newEndRow, newStartCol, newEndCol;
-    getCropSpecs(&newStartRow, &newEndRow, &newStartCol, &newEndCol);
+    getCropSpecs(rowSize, colSize, &newStartRow, &newEndRow, &newStartCol, &newEndCol);
     int newRowSize = newEndRow - newStartRow + 1;
     int newColSize = newEndCol - newStartCol + 1;
 
@@ -144,7 +147,7 @@ void cropImage(int image[][21], int rowSize, int colSize, int startRow, int endR
 
 
 
-void dimImage(int image[][21], int rowSize, int colSize) {
+void dimImage(int rowSize, int colSize, int image[][SIZE]) {
     for (int i = 0; i < rowSize; i++) {
         for (int j = 0; j < colSize; j++) {
             if (image[i][j] > 0) {
@@ -156,7 +159,7 @@ void dimImage(int image[][21], int rowSize, int colSize) {
     }
 }
 
-void brightenImage(int image[][21], int rowSize, int colSize) {
+void brightenImage(int rowSize, int colSize, int image[][SIZE]) {
     for (int i = 0; i < rowSize; i++) {
         for (int j = 0; j < colSize; j++) {
             if (image[i][j] < 4) {
@@ -168,38 +171,67 @@ void brightenImage(int image[][21], int rowSize, int colSize) {
     }
 }
 
-void loadNewImage(int rowSize, int colSize, int imageArray[rowSize][colSize], int* trueRowPtr, int* trueColPtr) {
-    FILE* file;
-    char fileName[50];
-    int row, col;
+void loadNewImage(int rowSize, int colSize, int imageArray[][colSize], int* trueRowPtr, int* trueColPtr) {
+	FILE* file;
+   	char fileName[50];
+   	int rowCount, colCount, elementCount, rowArray[rowSize][colSize];
+    	rowCount = colCount = elementCount = 0;
 
-    printf("What is the name of the image file? ");
-    scanf("%s", fileName);
+    	printf("What is the name of the image file? ");
+    	fscanf(stdin, "%s", fileName);
 
-    file = fopen(fileName, "r");
-    if (file == NULL) {
-        printf("Error opening file.\n");
-        return;
-    }
+    	file = fopen(fileName, "r");
+    	if (file != NULL) {
+        	for (int e = 0; e < colSize * rowSize; e++) {
+            		while (fscanf(file, "%1d", &e) == 1) {
+                		elementCount++;
+            		}
+        	}
+    	}
+   	else{
+    		printf("Error opening file.\n");
+        	return;
+    	}
+    	fclose(file);
 
-    // Read the image data from the file
-    for (row = 0; row < rowSize; row++) {
-        for (col = 0; col < colSize; col++) {
-            if (fscanf(file, "%1d", &imageArray[row][col]) != 1) {
-                printf("Error reading file.\n");
-                fclose(file);
-                return;
-            }
-        }
-    }
+    	file = fopen(fileName, "r");
+    	if (file != NULL) {
+        	for (int row = 0; row < rowSize; row++) {
+        	    for (int col = 0; col < colSize; col++) {
+        	        while (fscanf(file, "%d", &rowArray[row][col]) == 1) {
+        	            rowCount++;
+        	        }
+        	    }
+        	}
+    	}
+    	else{
+    		printf("Error opening file.\n");
+        	return;
+    	}
+    	fclose(file);
+    
+    	colCount = elementCount / rowCount;
+	
+    	file = fopen(fileName, "r");
+    	if (file != NULL) {
+        	for (int row = 0; row < rowCount; row++) {
+        	    for (int col = 0; col < colCount; col++) {
+        	        fscanf(file, "%1d", &imageArray[row][col]);
+        	    }
+        	}
+    	}
+    	else{
+    		printf("Error opening file.\n");
+    	    return;
+    	}
+    
+    	fclose(file);
 
-    fclose(file);
+    	*trueRowPtr = rowCount;
+    	*trueColPtr = colCount;
+	
 
-    // Update the true row and column counts
-    *trueRowPtr = rowSize;
-    *trueColPtr = colSize;
-
-    printf("\nImage successfully loaded!\n\n");
+   	printf("\nImage successfully loaded!\n\n");
 }
 
 
@@ -220,7 +252,8 @@ void saveNewImage(int rowSize, int colSize, int imageArray[][colSize]) {
             }
         }
     } else {
-        printf("Error opening file.\n");
+        printf("Error saving file.\n");
+        return;
     }
 
     fclose(file);
@@ -242,7 +275,7 @@ int getEditChoice() {
     return choice;
 }
 
-void getCropSpecs(int* startRowPtr, int* endRowPtr, int* startColPtr, int* endColPtr) {
+void getCropSpecs(int rowSize, int colSize, int* startRowPtr, int* endRowPtr, int* startColPtr, int* endColPtr) {
 
     
     printf("Current image dimensions: Rows: %d, Columns: %d\n", rowSize, colSize);
